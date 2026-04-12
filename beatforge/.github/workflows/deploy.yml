@@ -33,7 +33,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: beatforge
-          directory: apps/web/.next/public
+          directory: apps/web/.vercel/output/static
           productionBranch: main
       
       - name: Deploy Hono Workers API

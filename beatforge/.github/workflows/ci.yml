@@ -34,7 +34,15 @@ jobs:
       
       - run: pnpm install
       - run: pnpm run test:run
+        env:
+          DATABASE_URL: postgresql://test:test@localhost/test
+          BETTER_AUTH_SECRET: test-secret-key-for-testing-only
+          STRIPE_SECRET_KEY: sk_test_test
       - run: pnpm run test:cov
+        env:
+          DATABASE_URL: postgresql://test:test@localhost/test
+          BETTER_AUTH_SECRET: test-secret-key-for-testing-only
+          STRIPE_SECRET_KEY: sk_test_test
 
   build:
     runs-on: ubuntu-latest
@@ -48,4 +56,9 @@ jobs:
       
       - run: pnpm install
       - run: pnpm run build
+        env:
+          DATABASE_URL: postgresql://test:test@localhost/test
+          BETTER_AUTH_SECRET: test-secret-key-for-testing-only
+          STRIPE_SECRET_KEY: sk_test_test
+          NEXT_PUBLIC_API_URL: https://beatforge.pages.dev
       - run: pnpm run build:api
