@@ -1,0 +1,32 @@
+name = "beatforge-deployment-error"
+type = "service"
+main = "src/index.ts"
+
+# ====================================================================
+# WARNING: This wrangler.toml is at the project root INTENTIONALLY
+# ====================================================================
+#
+# This project uses GitHub Actions for automated deployment.
+# Do NOT run: wrangler deploy (from root)
+# Do NOT configure Cloudflare Pages to deploy directly
+#
+# CORRECT DEPLOYMENT:
+# 1. Configure in GitHub: Settings > Secrets > Add deployment tokens
+# 2. Push to main branch
+# 3. GitHub Actions automatically deploys:
+#    - Pages: Web app (Next.js)
+#    - Workers: API (Hono)
+#    - D1: Database migrations
+#
+# For API-only deployment:
+#   cd packages/api
+#   wrangler deploy --config wrangler.toml
+#
+# Or use the monorepo command:
+#   pnpm run deploy:api
+#
+# For documentation: See ../CLOUDFLARE_DEPLOYMENT.md
+# ====================================================================
+
+# This empty config will cause Wrangler to error out with a helpful message
+# See the error message above - do not modify this file

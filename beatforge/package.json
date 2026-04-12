@@ -11,7 +11,8 @@
   },
   "scripts": {
     "build": "turbo build",
-    "build:api": "wrangler deploy --config packages/api/wrangler.toml",
+    "build:api": "turbo build --filter=@beatforge/api",
+    "deploy": "echo 'ERROR: Use GitHub Actions for deployment. Run: git push origin main' && exit 1",
     "deploy:api": "wrangler deploy --config packages/api/wrangler.toml",
     "dev": "turbo dev",
     "lint": "turbo lint",

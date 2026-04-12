@@ -183,12 +183,36 @@ graph TD
 
 ### 🐛 Troubleshooting
 
-#### Build Fails: "Could not detect static files"
-**Cause:** Web app hasn't been built or not in the correct directory.
+#### Error: "Could not detect static files" (from `npx wrangler deploy`)
+**Cause:** Running `wrangler deploy` directly at root instead of via GitHub Actions.
+**Solution:** 
+Use GitHub Actions for deployment:
+```bash
+# Do NOT run:
+wrangler deploy
+npx wrangler deploy
+
+# Instead push to main:
+git push origin main
+
+# GitHub Actions automatically handles deployment
+# Monitor at: https://github.com/djmexxico1600/phase1/actions
+```
+
+If you need to deploy the API manually:
+```bash
+pnpm run deploy:api
+```
+
+For Pages setup in Cloudflare, see: [CLOUDFLARE_PAGES_CONFIG.md](CLOUDFLARE_PAGES_CONFIG.md)
+
+#### Build Fails: "Could not detect static files" (in GitHub Actions)
+**Cause:** Web app wasn't built correctly, or .vercel/output/static is missing.
 **Solution:** 
 ```bash
 cd apps/web && pnpm run build
 # Check that .vercel/output/static exists
+# Run locally to verify: pnpm run build (from root)
 ```
 
 #### API Deployment Fails
