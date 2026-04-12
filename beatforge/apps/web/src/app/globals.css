@@ -1,0 +1,371 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+ * DARK MODE THEME (default for BeatForge)
+ * CSS Variables for all colors, fonts, and design tokens
+ * ============================================================ */
+
+html {
+  @apply dark;
+}
+
+:root,
+html,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Core colors (HSL values without alpha for CSS variables) */
+  --color-border: 217 32% 17%;
+  --color-input: 217 32% 17%;
+  --color-ring: 224 71% 53%;
+  --color-background: 217 32% 9%;
+  --color-foreground: 213 31% 91%;
+
+  /* Primary (Blue accent) */
+  --color-primary: 224 71% 53%;
+  --color-primary-foreground: 210 40% 98%;
+
+  /* Secondary (Purple) */
+  --color-secondary: 280 60% 55%;
+  --color-secondary-foreground: 210 40% 98%;
+
+  /* Destructive (Red) */
+  --color-destructive: 0 100% 64%;
+  --color-destructive-foreground: 210 40% 98%;
+
+  /* Muted (neutral gray) */
+  --color-muted: 217 32% 30%;
+  --color-muted-foreground: 215 14% 66%;
+
+  /* Accent (Vibrant green/teal for CTAs) */
+  --color-accent: 165 85% 46%;
+  --color-accent-foreground: 210 40% 98%;
+
+  /* Success (Green) */
+  --color-success: 142 72% 47%;
+  --color-success-foreground: 210 40% 98%;
+
+  /* Warning (Orange) */
+  --color-warning: 38 92% 50%;
+  --color-warning-foreground: 210 40% 98%;
+
+  /* Music-specific (Waveform/beat colors) */
+  --color-beat: 224 71% 53%;
+  --color-beat-hover: 224 71% 63%;
+  --color-beat-light: 224 71% 23%;
+  --color-wave: 280 60% 55%;
+  --color-wave-hover: 280 60% 65%;
+  --color-wave-cursor: 165 85% 46%;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'Fira Code', 'Monaco', monospace;
+
+  /* Border radius */
+  --radius-beat: 0.75rem;
+  --radius-card: 1rem;
+}
+
+/* Light mode (if needed) */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --color-border: 220 14% 87%;
+  --color-input: 220 14% 87%;
+  --color-ring: 224 71% 53%;
+  --color-background: 0 0% 100%;
+  --color-foreground: 220 13% 13%;
+
+  --color-primary: 224 71% 53%;
+  --color-primary-foreground: 210 40% 98%;
+
+  --color-secondary: 280 60% 55%;
+  --color-secondary-foreground: 210 40% 98%;
+
+  --color-destructive: 0 100% 64%;
+  --color-destructive-foreground: 210 40% 98%;
+
+  --color-muted: 220 13% 91%;
+  --color-muted-foreground: 220 12% 44%;
+
+  --color-accent: 165 85% 46%;
+  --color-accent-foreground: 210 40% 98%;
+
+  --color-success: 142 72% 47%;
+  --color-success-foreground: 210 40% 98%;
+
+  --color-warning: 38 92% 50%;
+  --color-warning-foreground: 210 40% 98%;
+
+  --color-beat: 224 71% 53%;
+  --color-beat-hover: 224 71% 53%;
+  --color-beat-light: 224 71% 90%;
+  --color-wave: 280 60% 55%;
+  --color-wave-hover: 280 60% 55%;
+  --color-wave-cursor: 165 85% 46%;
+}
+
+/* ============================================================
+ * BASE STYLES
+ * ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply bg-background text-foreground font-sans transition-colors duration-300;
+  line-height: 1.6;
+}
+
+/* Selection colors (music-themed) */
+::selection {
+  @apply bg-primary text-primary-foreground;
+}
+
+::-moz-selection {
+  @apply bg-primary text-primary-foreground;
+}
+
+/* Scrollbar styling (modern) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted rounded-full hover:bg-muted-foreground;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-color: hsl(var(--color-muted)) hsl(var(--color-background));
+  scrollbar-width: thin;
+}
+
+/* ============================================================
+ * TYPOGRAPHY
+ * ============================================================ */
+
+h1 {
+  @apply text-4xl md:text-5xl font-display font-bold tracking-tight;
+}
+
+h2 {
+  @apply text-3xl md:text-4xl font-display font-bold tracking-tight;
+}
+
+h3 {
+  @apply text-2xl font-display font-bold;
+}
+
+h4 {
+  @apply text-xl font-display font-semibold;
+}
+
+h5 {
+  @apply text-lg font-display font-semibold;
+}
+
+h6 {
+  @apply text-base font-display font-semibold uppercase tracking-wide;
+}
+
+p {
+  @apply leading-relaxed;
+}
+
+a {
+  @apply text-primary hover:text-primary/80 transition-colors duration-200 underline-offset-4;
+
+  &:hover {
+    @apply underline;
+  }
+}
+
+/* Code blocks */
+code {
+  @apply font-mono text-sm bg-muted px-2 py-1 rounded;
+}
+
+pre {
+  @apply bg-muted px-4 py-3 rounded-lg overflow-x-auto;
+
+  code {
+    @apply bg-transparent px-0 py-0;
+  }
+}
+
+/* ============================================================
+ * FORM ELEMENTS
+ * ============================================================ */
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='url'],
+input[type='number'],
+textarea,
+select {
+  @apply bg-input border border-border rounded-md px-3 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background transition-all duration-200;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  @apply w-4 h-4 rounded cursor-pointer;
+}
+
+/* ============================================================
+ * AUDIO PLAYER (Waveform)
+ * ============================================================ */
+
+.waveform-player {
+  @apply w-full rounded-lg overflow-hidden bg-gradient-to-r from-beat-light to-beat;
+}
+
+.waveform-progress {
+  @apply h-1 bg-wave rounded-full;
+}
+
+.waveform-handle {
+  @apply w-3 h-3 rounded-full bg-wave-cursor shadow-lg cursor-grab;
+
+  &:active {
+    @apply cursor-grabbing;
+  }
+}
+
+/* ============================================================
+ * ANIMATIONS & TRANSITIONS
+ * ============================================================ */
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton {
+  animation-name: skeleton-loading;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--color-muted)) 25%,
+    hsl(var(--color-muted) / 0.6) 50%,
+    hsl(var(--color-muted)) 75%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Loading spinner */
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid hsl(var(--color-muted));
+  border-top-color: hsl(var(--color-primary));
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* ============================================================
+ * UTILITIES FOR MUSIC UI
+ * ============================================================ */
+
+/* Glass morphism for modern UI */
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Beat card hover effect */
+.beat-card {
+  @apply transition-all duration-300 hover:shadow-beat hover:scale-105;
+}
+
+/* Flex center */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+/* Truncate text */
+.truncate-1 {
+  @apply line-clamp-1;
+}
+
+.truncate-2 {
+  @apply line-clamp-2;
+}
+
+.truncate-3 {
+  @apply line-clamp-3;
+}
+
+/* Responsive width */
+.container-max {
+  @apply max-w-7xl mx-auto;
+}
+
+/* ============================================================
+ * ACCESSIBILITY
+ * ============================================================ */
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: more) {
+  * {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+ * PRINT STYLES
+ * ============================================================ */
+
+@media print {
+  body {
+    @apply bg-white text-black;
+  }
+
+  a {
+    @apply text-black;
+
+    &::after {
+      content: ' (' attr(href) ')';
+    }
+  }
+}

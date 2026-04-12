@@ -1,0 +1,26 @@
+/**
+ * @file packages/api/package.json
+ * @description Package.json for Hono Workers API.
+ */
+{
+  "name": "@beatforge/api",
+  "version": "1.0.0",
+  "description": "BeatForge Hono Workers API for background jobs",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --env production",
+    "deploy:staging": "wrangler deploy --env staging",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "wrangler": "^3.95.0"
+  }
+}

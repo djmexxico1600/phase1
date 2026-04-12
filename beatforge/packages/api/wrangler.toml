@@ -1,0 +1,61 @@
+/**
+ * @file packages/api/wrangler.toml
+ * @description Wrangler configuration for Hono Worker API.
+ */
+
+name = "beatforge-api"
+type = "service"
+main = "src/index.ts"
+compatibility_date = "2024-12-19"
+node_compat = true
+
+# Queues for background jobs
+[[queues.consumers]]
+queue = "email"
+max_batch_size = 10
+max_batch_timeout = 30
+max_concurrency = 5
+
+[[queues.consumers]]
+queue = "analytics"
+max_batch_size = 100
+max_batch_timeout = 60
+max_concurrency = 10
+
+[[queues.consumers]]
+queue = "notifications"
+max_batch_size = 50
+max_batch_timeout = 30
+max_concurrency = 5
+
+# Environment variables
+[env.production.vars]
+DATABASE_URL = ""
+STRIPE_SECRET = ""
+RESEND_API_KEY = ""
+ENVIRONMENT = "production"
+
+[env.staging.vars]
+DATABASE_URL = ""
+STRIPE_SECRET = ""
+RESEND_API_KEY = ""
+ENVIRONMENT = "staging"
+
+# Database connection
+[env.production.d1]
+binding = "DB"
+database_name = "beatforge"
+
+[env.staging.d1]
+binding = "DB"
+database_name = "beatforge-staging"
+
+# KV for rate limiting and caching
+[[kv_namespaces]]
+binding = "KV"
+id = "xxxx"
+preview_id = "xxxx"
+
+# Analytics (optional: cloudflare analytics)
+[[analytics_engine_datasets]]
+binding = "ANALYTICS"

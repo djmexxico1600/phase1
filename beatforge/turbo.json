@@ -1,0 +1,209 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "NODE_ENV",
+    "CI",
+    "VERCEL",
+    "VERCEL_ENV",
+    "VERCEL_URL",
+    "NEON_DATABASE_URL",
+    "NEON_DATABASE_URL_UNPOOLED",
+    "BETTER_AUTH_SECRET",
+    "BETTER_AUTH_URL",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+    "CLOUDFLARE_ACCOUNT_ID",
+    "CLOUDFLARE_API_TOKEN",
+    "R2_ACCESS_KEY_ID",
+    "R2_SECRET_ACCESS_KEY",
+    "R2_BUCKET_NAME",
+    "R2_PUBLIC_URL",
+    "RESEND_API_KEY",
+    "EMAIL_FROM",
+    "SENTRY_DSN",
+    "SENTRY_ORG",
+    "SENTRY_PROJECT",
+    "SENTRY_AUTH_TOKEN",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "NEXT_PUBLIC_POSTHOG_KEY",
+    "NEXT_PUBLIC_POSTHOG_HOST",
+    "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+    "TURNSTILE_SECRET_KEY",
+    "NEXT_PUBLIC_APP_URL",
+    "NEXT_PUBLIC_APP_NAME"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env",
+        ".env.local",
+        ".env.production",
+        ".env.production.local"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**",
+        ".wrangler/**"
+      ],
+      "env": [
+        "NEXT_PUBLIC_*",
+        "NEON_DATABASE_URL",
+        "BETTER_AUTH_SECRET",
+        "BETTER_AUTH_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+        "CLOUDFLARE_ACCOUNT_ID",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY",
+        "R2_BUCKET_NAME",
+        "R2_PUBLIC_URL",
+        "RESEND_API_KEY",
+        "EMAIL_FROM",
+        "SENTRY_DSN",
+        "SENTRY_ORG",
+        "SENTRY_PROJECT",
+        "SENTRY_AUTH_TOKEN"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "NEXT_PUBLIC_*",
+        "NEON_DATABASE_URL",
+        "NEON_DATABASE_URL_UNPOOLED",
+        "BETTER_AUTH_SECRET",
+        "BETTER_AUTH_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+        "CLOUDFLARE_ACCOUNT_ID",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY",
+        "R2_BUCKET_NAME",
+        "R2_PUBLIC_URL",
+        "RESEND_API_KEY",
+        "EMAIL_FROM",
+        "SENTRY_DSN",
+        "NEXT_PUBLIC_SENTRY_DSN",
+        "TURNSTILE_SECRET_KEY"
+      ]
+    },
+    "lint": {
+      "dependsOn": ["^lint"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".eslintrc.json",
+        ".eslintignore",
+        "../../.eslintrc.json"
+      ],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "vitest.config.ts",
+        "vitest.config.mts"
+      ],
+      "outputs": [
+        "coverage/**"
+      ],
+      "env": [
+        "NEON_DATABASE_URL",
+        "NEON_DATABASE_URL_UNPOOLED",
+        "BETTER_AUTH_SECRET",
+        "BETTER_AUTH_URL"
+      ]
+    },
+    "test:e2e": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.e2e.ts",
+        "**/*.e2e.tsx",
+        "playwright.config.ts"
+      ],
+      "outputs": [
+        "playwright-report/**",
+        "test-results/**"
+      ],
+      "env": [
+        "NEXT_PUBLIC_APP_URL",
+        "BETTER_AUTH_URL"
+      ]
+    },
+    "type-check": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "tsconfig.json",
+        "../../tsconfig.json"
+      ],
+      "outputs": [
+        "*.tsbuildinfo"
+      ]
+    },
+    "db:generate": {
+      "cache": false,
+      "inputs": [
+        "src/schema/**",
+        "drizzle.config.ts",
+        "../../drizzle.config.ts"
+      ],
+      "outputs": [
+        "src/migrations/**"
+      ],
+      "env": [
+        "NEON_DATABASE_URL_UNPOOLED"
+      ]
+    },
+    "db:migrate": {
+      "cache": false,
+      "env": [
+        "NEON_DATABASE_URL",
+        "NEON_DATABASE_URL_UNPOOLED"
+      ]
+    },
+    "db:push": {
+      "cache": false,
+      "env": [
+        "NEON_DATABASE_URL",
+        "NEON_DATABASE_URL_UNPOOLED"
+      ]
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "NEON_DATABASE_URL",
+        "NEON_DATABASE_URL_UNPOOLED"
+      ]
+    },
+    "db:seed": {
+      "cache": false,
+      "env": [
+        "NEON_DATABASE_URL",
+        "NEON_DATABASE_URL_UNPOOLED"
+      ]
+    },
+    "clean": {
+      "cache": false
+    }
+  },
+  "remoteCache": {
+    "enabled": true,
+    "signature": true
+  },
+  "ui": "tui"
+}

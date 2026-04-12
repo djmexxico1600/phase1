@@ -1,0 +1,17 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.next
+dist
+.turbo
+.wrangler
+storybook-static
+
+# Coverage
+coverage
+.nyc_output
+
+# Misc
+*.min.js
+pnpm-lock.yaml
