@@ -28,7 +28,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: beatforge
-          directory: apps/web/.next
+          directory: apps/web/.next/public
           branch: ${{ github.head_ref }}
       
       - name: Comment PR with preview URL

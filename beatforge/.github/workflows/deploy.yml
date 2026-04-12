@@ -28,7 +28,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: beatforge
-          directory: apps/web/.next
+          directory: apps/web/.next/public
           productionBranch: main
       
       - name: Deploy Hono Workers API
@@ -48,6 +48,6 @@ jobs:
           cache: 'pnpm'
       
       - run: pnpm install
-      - run: pnpm run migrate:prod
+      - run: pnpm run db:migrate:prod
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
