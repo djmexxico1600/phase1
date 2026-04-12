@@ -6,35 +6,90 @@
 
 ## Quick Start (5 Minutes)
 
-### 1️⃣ Configure GitHub Secrets
+### 1️⃣ Pre-Deployment Verification
 ```bash
-# Interactive setup
+# Verify all prerequisites are in place
+bash PRE_DEPLOYMENT_CHECK.sh
+```
+
+### 2️⃣ Configure GitHub Secrets (One-time)
+```bash
+# Interactive setup - REQUIRED for automated deployment
 bash SETUP_GITHUB_SECRETS.sh
 
 # Or manual: https://github.com/djmexxico1600/phase1/settings/secrets/actions
 ```
 
 **Required 7 secrets**:
-- CLOUDFLARE_API_TOKEN
-- CLOUDFLARE_ACCOUNT_ID
-- WRANGLER_API_TOKEN
-- DATABASE_URL
-- STRIPE_SECRET_KEY
-- STRIPE_WEBHOOK_SECRET
-- BETTER_AUTH_SECRET
+- ✅ CLOUDFLARE_API_TOKEN
+- ✅ CLOUDFLARE_ACCOUNT_ID
+- ✅ WRANGLER_API_TOKEN
+- ✅ DATABASE_URL
+- ✅ STRIPE_SECRET_KEY
+- ✅ STRIPE_WEBHOOK_SECRET
+- ✅ BETTER_AUTH_SECRET
 
-### 2️⃣ Deploy to Production
+### 3️⃣ Deploy to Production (Automatic)
 ```bash
-# Automatic deployment
-bash DEPLOY.sh
+# Recommended: Use GitHub Actions (automatically triggered)
+git checkout main
+git pull
+# Make changes...
+git commit -m "Feature: xyz"
+git push origin main
+# ✨ GitHub Actions automatically deploys!
 
-# Or manual trigger
+# Or manually trigger the workflow
 gh workflow run deploy.yml --repo djmexxico1600/phase1
+
+# Watch deployment progress
+gh run list --repo djmexxico1600/phase1 --workflow=deploy.yml
 ```
 
-### 3️⃣ Visit Live Site
+### 4️⃣ Verify Deployment
+```bash
+# Check workflow status
+gh run list --repo djmexxico1600/phase1
+
+# View logs
+gh run view <run-id> --repo djmexxico1600/phase1
 ```
-https://beatforge.pages.dev
+
+### 5️⃣ Visit Live Site
+```
+🌐 https://beatforge.pages.dev
+```
+
+---
+
+## ⚠️ Important Notes
+
+**❌ DO NOT** manually run `wrangler deploy` or `npx wrangler deploy`
+- This causes "Could not detect static files" error
+- Use GitHub Actions instead (automatically handles deployment)
+
+**✅ DO**:
+- Push changes to `main` branch
+- GitHub Actions automatically handles all deployment
+- View workflow status at: https://github.com/djmexxico1600/phase1/actions
+
+**Deployment Flow**:
+```
+Push to main
+    ↓
+GitHub Actions triggered
+    ↓
+Run tests (pnpm test:run)
+    ↓
+Build project (pnpm build)
+    ↓
+Deploy Web App (Pages)
+    ↓
+Deploy API (Workers)
+    ↓
+Run migrations (pnpm db:migrate:prod)
+    ↓
+✅ Live and ready!
 ```
 
 ---

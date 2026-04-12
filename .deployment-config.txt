@@ -1,0 +1,35 @@
+⚠️ DEPLOYMENT CONFIGURATION NOTE
+
+This project uses Cloudflare for hosting with two components:
+
+1. WEB APP (Next.js)
+   - Platform: Cloudflare Pages
+   - Deployment: GitHub Actions (automated)
+   - Config: .github/workflows/deploy.yml
+   - URL: https://beatforge.pages.dev
+
+2. API (Hono Workers)  
+   - Platform: Cloudflare Workers
+   - Deployment: GitHub Actions (automated) OR pnpm run deploy:api
+   - Config: packages/api/wrangler.toml
+   - Environment: Production
+
+IMPORTANT:
+- ❌ DO NOT run: wrangler deploy (at project root)
+- ❌ DO NOT run: npx wrangler deploy
+  → This will fail with "Could not detect static files" error
+
+✅ CORRECT DEPLOYMENT METHODS:
+
+1. Primary (Recommended):
+   - Push to main branch
+   - GitHub Actions automatically deploys both components
+   
+2. Alternative (Manual API only):
+   - pnpm run deploy:api
+   - Requires WRANGLER_API_TOKEN environment variable
+
+For full details, see:
+- CLOUDFLARE_DEPLOYMENT.md (comprehensive guide)
+- .github/workflows/deploy.yml (automated workflow)
+- QUICK_START.md (5-minute setup)
