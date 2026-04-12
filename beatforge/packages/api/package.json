@@ -1,7 +1,3 @@
-/**
- * @file packages/api/package.json
- * @description Package.json for Hono Workers API.
- */
 {
   "name": "@beatforge/api",
   "version": "1.0.0",
