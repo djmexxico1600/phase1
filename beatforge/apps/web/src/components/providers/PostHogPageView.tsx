@@ -1,9 +1,9 @@
+"use client";
+
 /**
  * @file src/components/providers/PostHogPageView.tsx
  * @description Track page views with PostHog.
  */
-
-'use client';
 
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -29,38 +29,5 @@ export default function PostHogPageView() {
   return null;
 }
 /**
- * @file src/components/providers/PostHogProvider.tsx
- * @description PostHog analytics provider (client-side).
+ * PostHogProvider is implemented separately in PostHogProvider.tsx.
  */
-
-'use client';
-
-import { ReactNode, useEffect } from 'react';
-import posthog from 'posthog-js';
-import PostHogPageView from './PostHogPageView';
-
-interface PostHogProviderProps {
-  children: ReactNode;
-}
-
-export default function PostHogProvider({
-  children,
-}: PostHogProviderProps) {
-  useEffect(() => {
-    if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
-      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-        loaded: (ph) => {
-          if (process.env.NODE_ENV === 'development') ph.debug();
-        },
-      });
-    }
-  }, []);
-
-  return (
-    <>
-      <PostHogPageView />
-      {children}
-    </>
-  );
-}

@@ -8,23 +8,16 @@
  * - Turbopack for dev, webpack for prod
  */
 
-import { build } from '@cloudflare/next-on-pages/next-env.mjs';
+// Note: skip importing the next-on-pages build wrapper here so `next build`
+// can run in CI. The Cloudflare adapter is configured elsewhere and
+// Pages-specific steps are handled during deploy.
+
+import path from 'path';
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Turbopack for development speed
-  turbopack: {
-    resolveAlias: {
-      canvas: false, // Exclude canvas from browser bundle
-    },
-  },
-
-  // Experimental features for 2026
-  experimental: {
-    ppr: true, // Partial Prerendering for fast dynamic routes
-    dynamicIO: true, // Optimize dynamic content
-    testProxy: true, // Test environment proxy
-  },
+  // Turbopack and experimental flags removed for CI build compatibility.
 
   // Image optimization (supports R2 and external URLs)
   images: {
@@ -170,6 +163,10 @@ const nextConfig = {
         },
       };
     }
+    // Add tsconfig paths plugin to resolve `@/*` paths
+    config.resolve = config.resolve || {};
+    config.resolve.plugins = config.resolve.plugins || [];
+    config.resolve.plugins.push(new TsconfigPathsPlugin({ configFile: path.resolve(process.cwd(), 'tsconfig.json') }));
     return config;
   },
 
@@ -184,15 +181,8 @@ const nextConfig = {
     return new Date().toISOString().split('T')[0];
   },
 
-  // Cloudflare Pages via @cloudflare/next-on-pages
-  skipMiddlewareSourceMap: true,
-  skipTrailingSlashRedirect: true,
-
-  // Ensure stable IDs for Suspense boundaries
-  unstableRpcHandler: true,
-
   // Production output for Cloudflare
   output: 'standalone',
 };
 
-export default build(nextConfig);
+export default nextConfig;

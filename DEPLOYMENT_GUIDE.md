@@ -102,17 +102,25 @@ git push origin main
 **Triggers**: Push to main branch only
 **Steps**:
 1. Checkout code
-2. Build all packages (`pnpm run build`)
-3. Deploy to Cloudflare Pages
+2. Install dependencies (`pnpm install`)
+3. Build web app for Cloudflare Pages (`pnpm --filter @beatforge/web run build`)
+   - Outputs to `apps/web/.vercel/output/static`
+   - Uses all required environment variables
+4. Verify Pages artifact exists
+5. Deploy to Cloudflare Pages via GitHub Actions
    - Uses `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`
-   - Publishes `apps/web/.next/public`
-4. Deploy Hono Workers API (`pnpm run deploy:api`)
+   - Publishes `apps/web/.vercel/output/static`
+6. Build and deploy Hono Workers API (`pnpm run deploy:api`)
    - Uses `WRANGLER_API_TOKEN`
-5. Run database migrations (`pnpm run db:migrate:prod`)
+7. Run database migrations (`pnpm run db:migrate:prod`)
    - Uses `DATABASE_URL`
 
+**Important**: Do NOT manually run `npx wrangler deploy` from the repo root
+- The root `wrangler.toml` is a guard file (intentionally not deployable)
+- GitHub Actions handles all deployments via the Pages API and Wrangler
+
 **Expected Time**: ~5-10 minutes
-**Automatic**: Runs migrations after successful deployment
+**Automatic**: Database migrations run after successful deployment
 
 ### Preview Workflow (.github/workflows/preview.yml)
 **Triggers**: Pull Requests to main/develop
@@ -138,6 +146,7 @@ Check: https://github.com/djmexxico1600/phase1/actions
 
 | Error | Cause | Fix |
 |-------|-------|-----|
+| "Could not detect a directory containing static files" | Cloudflare Pages is configured to run custom build instead of GitHub Actions | Go to Cloudflare Pages Settings > Builds & deployments: Clear "Build command" field, leave blank. Let GitHub Actions handle deployment. See CLOUDFLARE_PAGES_CONFIG.md |
 | "Unauthorized 401" | Invalid/missing API token | Re-check Cloudflare/Wrangler tokens in GitHub Secrets |
 | "Secret not found" | Secret name typo | Verify exact secret names (case-sensitive) |
 | "Database connection failed" | Bad DATABASE_URL | Verify Neon connection string format |
