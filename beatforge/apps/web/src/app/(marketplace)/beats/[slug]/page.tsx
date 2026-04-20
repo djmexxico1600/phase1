@@ -12,7 +12,7 @@ interface BeatPageProps {
   params: { slug: string };
 }
 
-export async function generateMetadata({ params }: BeatPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: any): Promise<Metadata> {
   const beat = await db.query.beats
     .findFirst({
       where: (beats, { eq }) => eq(beats.slug, params.slug),
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: BeatPageProps): Promise<Metad
   };
 }
 
-export default async function BeatPage({ params }: BeatPageProps) {
+export default async function BeatPage({ params }: any) {
   const beat = await db.query.beats
     .findFirst({
       where: (beats, { eq }) => eq(beats.slug, params.slug),

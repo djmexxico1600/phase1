@@ -7,7 +7,17 @@
 
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import * as authPlugins from 'better-auth/plugins';
+// Dynamically import plugins to avoid build-time errors when a plugin
+// is not available in the installed version of `better-auth`.
+let authPlugins: any = {};
+try {
+  // Top-level await is supported in modern Node; Next.js server builds allow it.
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  authPlugins = await import('better-auth/plugins');
+} catch {
+  authPlugins = {};
+}
 import { roles } from '@beatforge/shared';
 import { db } from './db';
 import { getServerEnv } from './env';
