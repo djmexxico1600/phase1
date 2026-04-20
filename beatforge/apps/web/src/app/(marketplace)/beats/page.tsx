@@ -15,11 +15,7 @@ export const metadata: Metadata = {
   description: 'Discover and buy royalty-free beats from producers worldwide',
 };
 
-export default async function BeatsPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function BeatsPage({ searchParams }: any) {
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
