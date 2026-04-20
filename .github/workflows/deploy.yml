@@ -1,0 +1,85 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - run: pnpm install
+      
+      # Build the web app to produce Cloudflare Pages static output (.vercel/output/static)
+      - name: Build web app for Cloudflare Pages
+        run: pnpm --filter @beatforge/web run build
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+          NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
+          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+          DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
+          GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      
+      # Verify Pages static output was created
+      - name: Verify Pages artifact
+        run: |
+          if [[ ! -d "apps/web/.vercel/output/static" ]]; then
+            echo "ERROR: apps/web/.vercel/output/static not found!"
+            find apps/web -maxdepth 3 -type d -name ".vercel" -o -name ".next" -o -name "dist" | head -20
+            exit 1
+          fi
+          echo "✓ Pages artifact found at apps/web/.vercel/output/static"
+          ls -la apps/web/.vercel/output/static | head -20
+      
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: beatforge
+          directory: apps/web/.vercel/output/static
+          productionBranch: main
+      
+      # Build API separately for Workers deployment
+      - name: Build API Worker
+        run: pnpm --filter @beatforge/api run build
+      
+      - name: Deploy API Worker
+        run: pnpm run deploy:api
+        env:
+          WRANGLER_API_TOKEN: ${{ secrets.WRANGLER_API_TOKEN }}
+
+  migrations:
+    needs: build_and_deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - run: pnpm install
+      - run: pnpm run db:migrate:prod
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

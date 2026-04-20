@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - run: pnpm install
+      - run: pnpm run lint
+      - run: pnpm run type-check
+      - run: pnpm run format:check
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - run: pnpm install
+      - run: pnpm run test:run
+        env:
+          DATABASE_URL: postgresql://test:test@localhost/test
+          BETTER_AUTH_SECRET: test-secret-key-for-testing-only
+          STRIPE_SECRET_KEY: sk_test_test
+      - run: pnpm run test:cov
+        env:
+          DATABASE_URL: postgresql://test:test@localhost/test
+          BETTER_AUTH_SECRET: test-secret-key-for-testing-only
+          STRIPE_SECRET_KEY: sk_test_test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - run: pnpm install
+      - run: pnpm run build
+        env:
+          DATABASE_URL: postgresql://test:test@localhost/test
+          BETTER_AUTH_SECRET: test-secret-key-for-testing-only
+          STRIPE_SECRET_KEY: sk_test_test
+          NEXT_PUBLIC_API_URL: https://beatforge.pages.dev
+      - run: pnpm run build:api
