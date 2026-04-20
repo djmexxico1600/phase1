@@ -9,6 +9,9 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: beatforge
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
@@ -24,6 +27,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: beatforge
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
@@ -46,6 +52,9 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: beatforge
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2

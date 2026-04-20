@@ -7,6 +7,9 @@ on:
 jobs:
   preview:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: beatforge
     permissions:
       pull-requests: write
     
@@ -33,7 +36,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: beatforge
-          directory: apps/web/.vercel/output/static
+          directory: beatforge/apps/web/.vercel/output/static
           branch: ${{ github.head_ref }}
       
       - name: Comment PR with preview URL
