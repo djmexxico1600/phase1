@@ -12,7 +12,7 @@ interface ProducerPageProps {
   params: { username: string };
 }
 
-export async function generateMetadata({ params }: ProducerPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: any): Promise<Metadata> {
   const producer = await db.query.users
     .findFirst({
       where: (users, { eq }) => eq(users.username, params.username),
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: ProducerPageProps): Promise<M
   };
 }
 
-export default async function ProducerPage({ params }: ProducerPageProps) {
+export default async function ProducerPage({ params }: any) {
   const producer = await db.query.users
     .findFirst({
       where: (users, { eq, and }) =>
