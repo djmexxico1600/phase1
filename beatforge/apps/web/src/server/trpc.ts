@@ -4,7 +4,6 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
-import { type NextRequest } from 'next/server';
 import superjson from 'superjson';
 import { db } from '@/lib/db';
 import { requireAuth, type User, type Session } from '@/lib/auth';
@@ -12,7 +11,7 @@ import { requireAuth, type User, type Session } from '@/lib/auth';
 /**
  * Create context from Next.js Request object.
  */
-export async function createTRPCContext(req?: NextRequest) {
+export async function createTRPCContext(req?: Request) {
   let session: Session | undefined;
   let user: User | undefined;
 

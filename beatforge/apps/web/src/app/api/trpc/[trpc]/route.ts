@@ -4,23 +4,23 @@
  */
 
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import { type NextRequest } from 'next/server';
 import { appRouter } from '@/server/routers';
 import { createTRPCContext } from '@/server/trpc';
 
 /**
- * Handle tRPC requests.
+ * tRPC route handlers for Next.js App Router.
  */
-export async function handle(req: NextRequest) {
+export async function GET(req: Request) {
   return fetchRequestHandler({
-    endpoint: '/api/trpc',
     req,
     router: appRouter,
-    createContext: () => createTRPCContext(req),
+    createContext: () => createTRPCContext(req as any),
     onError: ({ path, error }) => {
       console.error(`tRPC error on path [${path}]:`, error);
     },
   });
 }
 
-export { handle as GET, handle as POST };
+export async function POST(req: Request) {
+  return GET(req);
+}
